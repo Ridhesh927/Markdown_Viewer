@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1f293d"/>
+      <stop offset="100%" stop-color="#0b0f17"/>
+    </linearGradient>
+    <linearGradient id="borderGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#1f6feb" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="arrowGradient" x1="48" y1="19" x2="48" y2="45" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#79b8ff"/>
+      <stop offset="100%" stop-color="#388bfd"/>
+    </linearGradient>
+    <filter id="badgeShadow" x="-2" y="-2" width="68" height="68" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Rounded Square Badge -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bgGradient)" stroke="url(#borderGradient)" stroke-width="2.5" filter="url(#badgeShadow)"/>
+
+  <!-- Subtle Inner Top Highlight -->
+  <path d="M 6 16 C 6 9 10 5 18 5 L 46 5 C 54 5 58 9 58 16" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+  <!-- Markdown 'M' Mark -->
+  <path d="M 14 44 L 14 20 L 24 33 L 34 20 L 34 44" stroke="#f0f6fc" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Markdown '↓' Arrow -->
+  <path d="M 48 20 L 48 44" stroke="url(#arrowGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 41 37 L 48 44 L 55 37" stroke="url(#arrowGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
