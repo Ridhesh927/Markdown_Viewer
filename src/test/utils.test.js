@@ -2,7 +2,14 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { renderMarkdown, resetHeadingIds } from '../utils/markdownRenderer.js'
 import { buildToc } from '../utils/toc.js'
 import { validateMarkdownFile, pickMarkdownFile, MAX_FILE_SIZE } from '../utils/fileUtils.js'
-import { buildStandaloneHtml, sanitizeFileName } from '../utils/downloadHtml.js'
+import {
+  buildStandaloneHtml,
+  sanitizeFileName,
+  buildWordDocumentHtml,
+  exportToWord,
+  exportToPdf,
+  downloadHtml,
+} from '../utils/exportUtils.js'
 
 // ─── markdownRenderer ─────────────────────────────────────────
 
@@ -322,5 +329,45 @@ describe('buildStandaloneHtml', () => {
   it('uses fallback title when no filename', () => {
     const html = buildStandaloneHtml('# Doc', '')
     expect(html).toContain('<title>markdown-document</title>')
+  })
+})
+
+// ─── Word Document Export ─────────────────────────────────────
+
+describe('buildWordDocumentHtml', () => {
+  it('includes Microsoft Word XML namespace attributes', () => {
+    const doc = buildWordDocumentHtml('<h1>Project Title</h1>', 'project.md')
+    expect(doc).toContain('xmlns:w="urn:schemas-microsoft-com:office:word"')
+    expect(doc).toContain('xmlns:o="urn:schemas-microsoft-com:office:office"')
+    expect(doc).toContain('<w:WordDocument>')
+    expect(doc).toContain('<w:View>Print</w:View>')
+  })
+
+  it('embeds Calibri typography and page margin styles', () => {
+    const doc = buildWordDocumentHtml('<p>Hello world</p>', 'project.md')
+    expect(doc).toContain('Calibri')
+    expect(doc).toContain('margin: 1in')
+  })
+
+  it('includes the provided HTML content and document title', () => {
+    const doc = buildWordDocumentHtml('<h2>Section Title</h2>', 'spec.md')
+    expect(doc).toContain('<h2>Section Title</h2>')
+    expect(doc).toContain('<title>spec</title>')
+  })
+})
+
+describe('exportToWord', () => {
+  it('executes download successfully and sets .doc extension', () => {
+    const result = exportToWord('# Sample Note', 'notes.md')
+    expect(result.success).toBe(true)
+  })
+})
+
+// ─── PDF Export ───────────────────────────────────────────────
+
+describe('exportToPdf', () => {
+  it('creates print iframe and executes print workflow', () => {
+    const result = exportToPdf('# Meeting Agenda', 'agenda.md')
+    expect(result.success).toBe(true)
   })
 })

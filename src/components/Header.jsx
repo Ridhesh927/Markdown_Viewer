@@ -1,9 +1,19 @@
 import { SunIcon, MoonIcon, MarkdownBadgeIcon } from './Icons.jsx'
+import ExportMenu from './ExportMenu.jsx'
 
 /**
- * Top app header with branding, theme toggle, and optional action buttons.
+ * Top app header with branding, theme toggle, and export / action controls.
  */
-export default function Header({ theme, onToggleTheme, hasDocument, onClear, onDownload }) {
+export default function Header({
+  theme,
+  onToggleTheme,
+  hasDocument,
+  onClear,
+  onDownload,
+  onExport,
+}) {
+  const handleExport = onExport || onDownload
+
   return (
     <header className="flex items-center justify-between px-4 sm:px-6 py-3 bg-surface-800 border-b border-surface-600 shadow-md flex-shrink-0">
       {/* Brand */}
@@ -18,22 +28,9 @@ export default function Header({ theme, onToggleTheme, hasDocument, onClear, onD
       <div className="flex items-center gap-2 flex-shrink-0 ml-2">
         {hasDocument && (
           <>
-            <button
-              id="download-html-btn"
-              onClick={onDownload}
-              className="
-                hidden sm:inline-flex items-center gap-1.5 text-sm font-medium
-                px-3 py-1.5 rounded-lg
-                bg-accent text-white
-                hover:bg-accent-hover
-                transition-colors duration-150
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent
-              "
-              aria-label="Download as standalone HTML file"
-            >
-              <DownloadIcon className="w-4 h-4" aria-hidden="true" />
-              Download HTML
-            </button>
+            <div className="hidden sm:inline-block">
+              <ExportMenu onExport={handleExport} theme={theme} />
+            </div>
 
             <button
               id="clear-btn"
@@ -73,13 +70,5 @@ export default function Header({ theme, onToggleTheme, hasDocument, onClear, onD
         </button>
       </div>
     </header>
-  )
-}
-
-function DownloadIcon({ className }) {
-  return (
-    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-      <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-    </svg>
   )
 }

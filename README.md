@@ -26,7 +26,10 @@ The application is entirely **client-side and ephemeral** — no files or data a
 - 📊 **Mermaid Diagrams**: Interactive flowchart, sequence, and state diagram rendering directly from markdown code blocks.
 - 📋 **One-Click Code Copy**: Copy snippets directly from rendered code blocks with instant visual feedback.
 - 📑 **Auto-Generated Table of Contents**: Dynamic navigation drawer built from headings with smooth scrolling to sections.
-- 💾 **Standalone HTML Export**: Download the rendered document as a single, self-contained `.html` file that includes all styles and works offline in any browser.
+- 💾 **Multi-Format Export Menu**:
+  - **HTML (`.html`)**: Standalone, self-contained offline web document with embedded CSS.
+  - **PDF (`.pdf`)**: Native vector print-to-PDF layout with crisp text, pagination rules, and full Mermaid diagram rendering.
+  - **Word Document (`.doc`)**: Formatted Microsoft Word / Google Docs document with Word XML metadata, tables, blockquotes, and code styles.
 - 🌓 **Dark & Light Mode**: Built-in theme switcher with automatic detection of your system color preference.
 - 🔒 **Safe & Secure**: Robust sanitization powered by DOMPurify to protect against XSS injection.
 
@@ -40,7 +43,8 @@ Markdown_Viewer/
 ├── src/
 │   ├── components/             # Reusable UI components
 │   │   ├── DropZone.jsx        # Drag-and-drop & file selector landing screen
-│   │   ├── Header.jsx          # App header with theme toggle, clear, & export buttons
+│   │   ├── ExportMenu.jsx      # Multi-format export dropdown (HTML, PDF, Word)
+│   │   ├── Header.jsx          # App header with theme toggle, clear, & export menu
 │   │   ├── Icons.jsx           # SVG icon components
 │   │   ├── MarkdownEditor.jsx  # Line-numbered live Markdown textarea editor
 │   │   ├── MarkdownPreview.jsx # HTML preview panel with Mermaid rendering & copy buttons
@@ -48,9 +52,10 @@ Markdown_Viewer/
 │   │   └── TableOfContents.jsx # Collapsible table of contents drawer & navigation
 │   ├── test/                   # Test configuration and suites
 │   │   ├── setup.js            # Vitest environment setup
-│   │   └── utils.test.js       # Unit tests for rendering, sanitization, and TOC utilities
+│   │   └── utils.test.js       # Unit tests for rendering, sanitization, exports, and TOC
 │   ├── utils/                  # Core helper modules & utilities
-│   │   ├── downloadHtml.js     # Standalone HTML bundle generator and file download helper
+│   │   ├── exportUtils.js      # Comprehensive HTML, PDF, and Word export generators
+│   │   ├── downloadHtml.js     # Backwards-compatible export facade
 │   │   ├── fileUtils.js        # File reading, validation, and sample markdown loader
 │   │   ├── markdownRenderer.js # Marked parser configuration, syntax highlighter, and DOMPurify sanitizer
 │   │   └── toc.js              # Heading extractor and anchor slug generator

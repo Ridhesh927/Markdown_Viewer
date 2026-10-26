@@ -5,7 +5,8 @@ import MarkdownEditor from './components/MarkdownEditor.jsx'
 import MarkdownPreview from './components/MarkdownPreview.jsx'
 import TableOfContents from './components/TableOfContents.jsx'
 import ResizableSplit from './components/ResizableSplit.jsx'
-import { downloadHtml } from './utils/downloadHtml.js'
+import ExportMenu from './components/ExportMenu.jsx'
+import { downloadHtml, exportToPdf, exportToWord } from './utils/exportUtils.js'
 
 export default function App() {
   // ── Core state ──────────────────────────────────────────────
@@ -54,13 +55,27 @@ export default function App() {
     setTheme(t => t === 'dark' ? 'light' : 'dark')
   }, [])
 
-  const handleDownload = useCallback(() => {
+  const handleExport = useCallback((format = 'html') => {
     if (!markdown) return
-    const result = downloadHtml(markdown, fileName)
-    if (!result.success) {
-      setError(result.error || 'Download failed. Please try again.')
+    const previewContainer = typeof document !== 'undefined' ? document.getElementById('preview-container') : null
+    let result
+
+    if (format === 'pdf') {
+      result = exportToPdf(markdown, fileName, previewContainer)
+    } else if (format === 'doc' || format === 'word') {
+      result = exportToWord(markdown, fileName, previewContainer)
+    } else {
+      result = downloadHtml(markdown, fileName, previewContainer)
+    }
+
+    if (result && !result.success) {
+      setError(result.error || `Export as ${format.toUpperCase()} failed. Please try again.`)
     }
   }, [markdown, fileName])
+
+  const handleDownload = useCallback(() => {
+    handleExport('html')
+  }, [handleExport])
 
   const handleMarkdownChange = useCallback((text) => {
     setMarkdown(text)
@@ -98,6 +113,7 @@ export default function App() {
         hasDocument={hasDocument}
         onClear={handleClear}
         onDownload={handleDownload}
+        onExport={handleExport}
       />
 
       {/* Error banner */}
@@ -145,18 +161,12 @@ export default function App() {
             />
           </div>
 
-          {/* TOC + Mobile download bar */}
+          {/* TOC + Mobile export bar */}
           <div className="flex-shrink-0">
-            {/* Mobile download button */}
+            {/* Mobile export menu bar */}
             <div className="flex items-center justify-between px-4 py-2 border-t border-surface-600 sm:hidden bg-surface-800">
               <span className="text-xs text-gray-500 truncate max-w-40">{fileName}</span>
-              <button
-                onClick={handleDownload}
-                className="text-sm font-medium px-3 py-1.5 rounded-lg bg-accent text-white hover:bg-accent-hover transition-colors"
-                aria-label="Download as HTML"
-              >
-                Download HTML
-              </button>
+              <ExportMenu onExport={handleExport} theme={theme} compact dropDirection="up" />
             </div>
 
             <TableOfContents markdown={markdown} />
